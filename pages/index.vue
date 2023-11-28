@@ -14,6 +14,27 @@
         <p class="px-12 text-sky-500">這段文字會顯示 footer 插槽</p>
       </template>
     </NuxtLayout>
+    <ClientAndServer /><!-- SSR to SCR-->
+    <JustClient /><!-- 檔名多加.client 只有在Client才會渲染，跟ClientOnly差不多 -->
+    <ClientOnly>
+      <template #fallback
+        ><!-- SSR時顯示 -->
+        <p class="my-6 flex justify-center">
+          [BaseApplyButton.vue] 元件載入中...
+        </p></template
+      >
+      <p class="px-12 py-6 text-xl text-rose-500">
+        這段文字只會在瀏覽器中顯示(CSR)，不會在 SSR 時顯示
+      </p>
+      <BaseApplyButton />
+    </ClientOnly>
+    <div class="mt-8 flex items-center">
+      <input id="show-button" v-model="show" type="checkbox" class="h-5 w-5" />
+      <label for="show-button" class="ml-2 block text-base text-slate-800"
+        >顯示報名按鈕</label
+      >
+    </div>
+    <LazyBaseApplyRoundButton v-if="show" /><!-- 需要時才載入component -->
     <div class="flex items-center justify-between">
       <div class="flex items-center">
         <CustomHelloBinhan />
@@ -31,6 +52,8 @@
         探索動態路由的秘密
       </NuxtLink>
     </div>
+    <IronManWelcome />
+
     <hr class="mx-auto mb-4 border-2 border-gray-300" />
     <NuxtLink
       to="/about"
@@ -52,10 +75,18 @@
 </template>
 
 <script setup>
+const show = ref(false)
 const name = 'ㄅㄏ'
 const title = `${name}帥哥`
-onMounted(() => {
-  document.title = 'ㄅㄏ帥哥'
+useHead({
+  title: 'ㄅㄏ帥哥',
+  meta: [
+    {
+      hid: 'description',
+      name: 'description',
+      content: '這是一個帥哥的網站'
+    }
+  ]
 })
 </script>
 
